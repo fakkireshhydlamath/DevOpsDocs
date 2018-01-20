@@ -1,0 +1,49 @@
+ sudo apt-get install software-properties-common
+ sudo apt-add-repository ppa:ansible/ansible
+ sudo apt-get update
+ sudo apt-get install ansible
+
+
+ssh-keygen -t rsa
+
+Change the sshd_config
+
+PermitRootLogin yes
+
+service sshd restart
+
+
+ansible -m ping servers
+
+ansible -m ping all
+
+ansible -m ping host1
+
+
+ansible -m shell -a 'free -m' host1
+
+host1 ansible_ssh_host=192.0.2.1
+
+Scenario with server specific changes only 
+
+in 20 Total servers hwo to do specific changes to only 5 servers
+
+#cloud-config
+repo_update: true
+repo_upgrade: all
+
+packages
+- python
+
+runcmd:
+- [ sh, -c, "sed -i 's|prohibit-password|yes|g' /etc/ssh/sshd_config" ]
+- [ sh, -c, "apt-get -y install python" ]
+- [ sh, -c, 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDANUPCswZrfVjQy6Djr+e2sFtxNg9JY9y1ycv6e+eJI09/LIko4bp51faP/fIYR3rLSpkHv0uWWxG9MSAl5oEbrgDtLh30mXRi23yJy8xht1enCDtVG1lCWjRR8HhHwb3WnOKqWHohjxwRhj2oZQyBMxONWO0TveI5tn08NCmZpVpPS5e5GLkqgwb54H8OTZSV7x6E4SBHaDHaFw6NStfBG1lMAh3J91wkCJc1sCc+6jwIOv8e1QF5pR7fulFBn9beqs5zDvG8m12jlnFY+iGZgVH6pF0dajVTyYvrPbm1DPcPFVi9FZZgXQ5PkwUTTrHTCtI+AVZC7oZLmfCaTCqv" >> /root/.ssh/authorized_keys' ]
+
+
+#!/bin/bash
+apt-get update
+apt-get -y install python unzip
+sed -i 's|prohibit-password|yes|g' /etc/ssh/sshd_config
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkg8ob7v7N+qdXKvRE48qsLZoywcJFNITQ9/fn2ORZ+GqfbRI+RQuCUfL+VcVVmRJ2YIoBkY51nPLu8QBrYpxkaKMeeJ2RtquqzVr7q1ITF+D4G6Vri74HgC/yeCh8z7ZdAEfei0CsEoPhT+HfEFQlQOWQzj/6k9BTQ64SiYKtgJ5galWfEQtRxhUkgifpQUZT40rKe+fZwrBCRzP4Q4HR2RHgcU850CJces9bgQ6yG8Jf70ZPtiSQa7u8faqKJ/XDZhHlCG8oIIfHeg+O+h1Sa5+DOL3jsWKz5GpRi3MaKUkcAOpOoxaMLBg6Z47JBHHv2bEdtZK5uqrJsPlIQAOr" >> /root/.ssh/authorized_keys
+

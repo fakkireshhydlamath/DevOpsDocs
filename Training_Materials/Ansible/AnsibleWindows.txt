@@ -1,0 +1,19 @@
+https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+
+powershell -ExecutionPolicy ByPass -File ConfigureRemotingForAnsible.ps1
+
+pip install pywinrm
+
+apt-get install python-requests
+
+Config File Ansible Windows
+
+ansible_user: 'ErAnujSharma'
+ansible_password: '81101107011'
+ansible_port: 5986
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+
+
+
+

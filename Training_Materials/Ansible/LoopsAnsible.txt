@@ -1,0 +1,38 @@
+- name: configure users
+    user: name={{ item }} state=present groups=wheel
+    with_items:
+       - testuser1
+       - testuser2
+
+  - name: remove users
+    user: name={{ item }} state=absent
+    with_items:
+        - testuser1
+        - testuser2
+
+
+Nested Loop
+
+- shell: echo "nested test a={{ item[0] }} b={{ item[1] }} c={{ item[2] }}"
+      with_nested:
+        - [ 'red', 'blue', 'green' ]
+        - [ 1, 2, 3 ]
+        - [ 'up', 'down', 'strange']
+
+Files Loop
+
+- debug:
+        msg: "{{item}}"
+      with_file:
+        - first_example_file
+        - second_example_file
+
+
+Random Choice
+
+	- debug: msg={{ item }}
+  with_random_choice:
+     - "go through the door"
+     - "drink from the goblet"
+     - "press the red button"
+     - "do nothing"
