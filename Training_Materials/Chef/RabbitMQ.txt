@@ -1,0 +1,38 @@
+
+#cloud-config
+repo_update: true
+repo_upgrade: all
+
+packages:
+ - git
+ - curl
+ - wget
+
+runcmd:
+ - [ sh, -c, "curl -L https://www.opscode.com/chef/install.sh | bash" ]
+ - [ sh, -c, "chef-solo -v" ]
+ - [ sh, -c, "cd /root;git clone https://github.com/Anuj1990/rabbitmq.git" ]
+ - [ sh, -c, "cd /root;mv rabbitmq chef-repo" ]
+ - [ sh, -c, "cd /root/chef-repo;cp ca* /etc/ssl;cp cert* /etc/ssl" ]
+ - [ sh, -c, "cd /root/chef-repo;chef-solo -c solo.rb -j run.json" ]
+
+ - [ sh, -c, "cd /root/chef-repo;chef-solo -c solo.rb -j run_rhel.json" ]
+
+ - [ sh, -c, "cd /root/chef-repo;chef-solo -c solo.rb -j run_amazon.json" ]
+
+openssl genrsa -out ca.key 2048
+
+openssl req -new -x509 -days 365 -key ca.key -out cacert.crt
+
+openssl req -new -key ca.key -out cacsr.csr
+
+openssl x509 -req -days 365 -in cacsr.csr -CA cacert.crt -CAkey ca.key -set_serial 01 -out cert.crt
+
+
+[erlang_solutions]
+name=Centos 2017 - $basearch - Erlang Solutions
+baseurl=http://packages.erlang-solutions.com/rpm/centos/7/$basearch
+enabled=1
+fastestmirror_enabled=0
+gpgcheck=0
+gpgkey=http://packages.erlang-solutions.com/debian/erlang_solutions.asc
